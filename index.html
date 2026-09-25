@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Манул-экспресс: Звук [Ч]</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="game-container" id="gameContainer">
+        <section class="scene" id="scene">
+            <div class="background-layer" id="bgLayer">
+                <img src="img/kreml.png" alt="Кремль" class="bg-image active" id="bgImg">
+            </div>
+            
+            <div class="tracks">
+                <div class="track-line"></div>
+                <div class="track-sleepers"></div>
+            </div>
+
+            <div class="train-wrapper" id="trainWrapper">
+                <div class="train" id="train">
+                    <div class="smoke" id="smoke"></div>
+                    <div class="train-body">
+                        <div class="window"></div>
+                        <div class="wheel wheel-left"></div>
+                        <div class="wheel wheel-right"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="landmark-overlay" id="landmarkOverlay">
+                <div class="landmark-card" id="landmarkCard">
+                    <div class="landmark-image-wrapper">
+                        <img src="" alt="" class="landmark-image" id="landmarkImage">
+                        <div class="landmark-glow"></div>
+                    </div>
+                    <div class="landmark-info">
+                        <h2 class="landmark-title" id="landmarkTitle"></h2>
+                        <p class="landmark-description" id="landmarkDescription"></p>
+                    </div>
+                    <button class="btn btn-continue" id="continueBtn">Продолжить путешествие</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="ui-layer">
+            <div class="instruction-card" id="instructionCard">
+                <h2>Помоги Манулу доехать!</h2>
+                <p>Подними язычок чашечкой, набери воздух и <strong>удерживай кнопку</strong>, чтобы произнести [Ч-Ч-Ч] и разогнать поезд!</p>
+                <button class="btn btn-primary" id="startBtn">Поехали!</button>
+            </div>
+
+            <div class="action-zone" id="actionZone" style="display: none;">
+                <button class="blow-button" id="blowBtn">
+                    <span class="blow-icon">💨</span>
+                    <span class="blow-text">Дуй! [Ч-Ч-Ч]</span>
+                </button>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="game.js"></script>
+</body>
+</html>
