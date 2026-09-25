@@ -1,190 +1,429 @@
-class ManulGame {
-    constructor() {
-        this.state = {
-            isPlaying: false,
-            isMoving: false,
-            currentLocation: 0,
-            progress: 0,
-            locations: [
-                { 
-                    name: 'Кремль', 
-                    img: 'img/kreml.png',
-                    description: 'Московский Кремль — древнейшая часть Москвы, главный общественно-политический и историко-художественный комплекс города. Здесь находится официальная резиденция Президента России.'
-                },
-                { 
-                    name: 'Горы', 
-                    img: 'img/gora.png',
-                    description: 'Горы — величественные творения природы! Они покрыты снегом, а их вершины пронзают облака. В горах чистый воздух и живут удивительные животные.'
-                },
-                { 
-                    name: 'Парфенон', 
-                    img: 'img/parfenon.png',
-                    description: 'Парфенон — древнегреческий храм, построенный более 2400 лет назад в честь богини Афины. Это символ мудрости и культуры Древней Греции.'
-                },
-                { 
-                    name: 'Остров', 
-                    img: 'img/ostrov.png',
-                    description: 'Тропический остров — настоящий рай! Пальмы склонились над бирюзовой водой, а на песчаном пляже можно найти красивые ракушки и понаблюдать за крабами.'
-                },
-                { 
-                    name: 'Вигвам', 
-                    img: 'img/vigvam.png',
-                    description: 'Вигвам — традиционное жилище индейцев Северной Америки. Его делают из длинных шестов и шкур животных. Внутри тепло и уютно даже в холодную погоду!'
-                }
-            ]
-        };
+:root {
+    --primary-color: #ff6b6b;
+    --secondary-color: #4ecdc4;
+    --bg-color: #f7f9fc;
+    --text-color: #2d3436;
+    --train-speed: 0s;
+}
 
-        this.els = {
-            startBtn: document.getElementById('startBtn'),
-            instructionCard: document.getElementById('instructionCard'),
-            actionZone: document.getElementById('actionZone'),
-            blowBtn: document.getElementById('blowBtn'),
-            progressFill: document.getElementById('progressFill'),
-            trainWrapper: document.getElementById('trainWrapper'),
-            bgImg: document.getElementById('bgImg'),
-            smoke: document.getElementById('smoke'),
-            scene: document.getElementById('scene'),
-            landmarkOverlay: document.getElementById('landmarkOverlay'),
-            landmarkCard: document.getElementById('landmarkCard'),
-            landmarkImage: document.getElementById('landmarkImage'),
-            landmarkTitle: document.getElementById('landmarkTitle'),
-            landmarkDescription: document.getElementById('landmarkDescription'),
-            continueBtn: document.getElementById('continueBtn')
-        };
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
-        this.init();
+body {
+    font-family: 'Ubuntu', sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.scene {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+}
+
+.bg-image {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+.bg-image.active { opacity: 1; }
+
+.tracks {
+    position: absolute;
+    bottom: 15%;
+    width: 100%;
+    height: 20px;
+    z-index: 2;
+}
+.track-line {
+    position: absolute;
+    top: 5px;
+    width: 100%;
+    height: 4px;
+    background: #555;
+}
+.track-sleepers {
+    position: absolute;
+    top: 0;
+    width: 200%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 20px,
+        #8B4513 20px,
+        #8B4513 25px
+    );
+    animation: moveTrack var(--train-speed) linear infinite;
+}
+
+.train-wrapper {
+    position: absolute;
+    bottom: 18%;
+    left: -150px;
+    width: 150px;
+    height: 100px;
+    z-index: 3;
+    transition: left 0.1s linear;
+}
+
+.train-body {
+    width: 120px;
+    height: 70px;
+    background: var(--primary-color);
+    border-radius: 10px 20px 5px 5px;
+    position: absolute;
+    bottom: 20px;
+    left: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.window {
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    border-radius: 5px;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+.wheel {
+    width: 30px;
+    height: 30px;
+    background: #333;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -10px;
+    border: 4px solid #777;
+    animation: spinWheel var(--train-speed) linear infinite;
+}
+.wheel-left { left: 20px; }
+.wheel-right { right: 20px; }
+
+.smoke {
+    position: absolute;
+    top: -20px;
+    left: 30px;
+    width: 20px;
+    height: 20px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 50%;
+    opacity: 0;
+}
+
+@keyframes moveTrack {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-45px); }
+}
+@keyframes spinWheel {
+    100% { transform: rotate(360deg); }
+}
+@keyframes puffSmoke {
+    0% { transform: scale(0.5) translateY(0); opacity: 0.8; }
+    100% { transform: scale(2) translateY(-40px); opacity: 0; }
+}
+
+.ui-layer {
+    padding: 20px;
+    background: white;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.instruction-card {
+    text-align: center;
+}
+.instruction-card h2 {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+.instruction-card p {
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #666;
+    font-weight: 400;
+}
+
+.btn {
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    font-family: 'Ubuntu', sans-serif;
+}
+.btn:active {
+    transform: scale(0.95);
+}
+.btn-primary { background: var(--primary-color); color: white; }
+.btn-secondary { background: var(--secondary-color); color: white; }
+
+.action-zone {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.blow-button {
+    width: 100%;
+    max-width: 400px;
+    padding: 25px;
+    background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    box-shadow: 0 8px 15px rgba(78, 205, 196, 0.4);
+    transition: all 0.2s;
+    font-family: 'Ubuntu', sans-serif;
+}
+.blow-button:active, .blow-button.active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 8px rgba(78, 205, 196, 0.4);
+    background: linear-gradient(135deg, #44a08d, #388e7e);
+}
+.blow-icon { font-size: 2rem; }
+
+.progress-bar {
+    width: 100%;
+    max-width: 400px;
+    height: 12px;
+    background: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+    border-radius: 10px;
+    transition: width 0.1s linear;
+}
+
+.landmark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    z-index: 50;
+}
+
+.landmark-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.landmark-card {
+    background: white;
+    border-radius: 30px;
+    padding: 30px;
+    max-width: 90%;
+    width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    text-align: center;
+    transform: scale(0.3) rotate(-10deg);
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.landmark-overlay.active .landmark-card {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+}
+
+.landmark-image-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.landmark-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.6s ease 0.3s;
+}
+
+.landmark-overlay.active .landmark-image {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.landmark-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+    animation: glowPulse 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes glowPulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.landmark-info {
+    margin-bottom: 25px;
+}
+
+.landmark-title {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s ease 0.5s;
+    font-weight: 700;
+}
+
+.landmark-overlay.active .landmark-title {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.landmark-description {
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    line-height: 1.6;
+    color: #555;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s ease 0.7s;
+    font-weight: 400;
+}
+
+.landmark-overlay.active .landmark-description {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.btn-continue {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--secondary-color), #44a08d);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(78, 205, 196, 0.4);
+    transition: all 0.5s ease 0.9s;
+    transform: translateY(20px);
+    opacity: 0;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.landmark-overlay.active .btn-continue {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.btn-continue:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(78, 205, 196, 0.5);
+}
+
+.btn-continue:active {
+    transform: translateY(0);
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--primary-color);
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
     }
-
-    init() {
-        this.els.startBtn.addEventListener('pointerdown', () => this.startGame());
-        
-        this.els.blowBtn.addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            this.startMoving();
-        });
-        
-        ['pointerup', 'pointercancel', 'pointerleave'].forEach(event => {
-            this.els.blowBtn.addEventListener(event, () => this.stopMoving());
-        });
-
-        this.els.continueBtn.addEventListener('click', () => this.nextLocation());
-    }
-
-    startGame() {
-        this.els.instructionCard.style.display = 'none';
-        this.els.actionZone.style.display = 'flex';
-        this.state.isPlaying = true;
-    }
-
-    startMoving() {
-        if (!this.state.isPlaying) return;
-        this.state.isMoving = true;
-        this.els.blowBtn.classList.add('active');
-        
-        document.documentElement.style.setProperty('--train-speed', '0.5s');
-        this.smokeInterval = setInterval(() => this.puffSmoke(), 300);
-        this.moveInterval = setInterval(() => this.updateProgress(), 50);
-    }
-
-    stopMoving() {
-        this.state.isMoving = false;
-        this.els.blowBtn.classList.remove('active');
-        
-        document.documentElement.style.setProperty('--train-speed', '0s');
-        clearInterval(this.moveInterval);
-        clearInterval(this.smokeInterval);
-    }
-
-    updateProgress() {
-        if (this.state.progress >= 100) {
-            this.stopMoving();
-            this.showLandmark();
-            return;
-        }
-
-        this.state.progress += 1;
-        this.els.progressFill.style.width = `${this.state.progress}%`;
-
-        const sceneWidth = this.els.scene.offsetWidth;
-        const trainWidth = this.els.trainWrapper.offsetWidth;
-        const maxX = sceneWidth - trainWidth - 20;
-        const currentX = (this.state.progress / 100) * maxX;
-        
-        this.els.trainWrapper.style.left = `${currentX}px`;
-    }
-
-    puffSmoke() {
-        const smoke = this.els.smoke;
-        smoke.style.animation = 'none';
-        void smoke.offsetWidth;
-        smoke.style.animation = 'puffSmoke 0.6s ease-out forwards';
-    }
-
-    showLandmark() {
-        const location = this.state.locations[this.state.currentLocation];
-        
-        this.els.landmarkImage.src = location.img;
-        this.els.landmarkImage.alt = location.name;
-        this.els.landmarkTitle.textContent = location.name;
-        this.els.landmarkDescription.textContent = location.description;
-        
-        this.els.landmarkOverlay.classList.add('active');
-        
-        this.createConfetti();
-    }
-
-    createConfetti() {
-        const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#ff9f43', '#a29bfe'];
-        
-        for (let i = 0; i < 50; i++) {
-            setTimeout(() => {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animation = `confettiFall ${2 + Math.random() * 2}s linear forwards`;
-                
-                this.els.scene.appendChild(confetti);
-                
-                setTimeout(() => confetti.remove(), 4000);
-            }, i * 30);
-        }
-    }
-
-    nextLocation() {
-        this.els.landmarkOverlay.classList.remove('active');
-        
-        this.state.currentLocation++;
-
-        if (this.state.currentLocation >= this.state.locations.length) {
-            this.endGame();
-            return;
-        }
-
-        this.state.progress = 0;
-        this.els.progressFill.style.width = '0%';
-        this.els.trainWrapper.style.left = '-150px';
-
-        this.els.bgImg.style.opacity = '0';
-        setTimeout(() => {
-            this.els.bgImg.src = this.state.locations[this.state.currentLocation].img;
-            this.els.bgImg.onload = () => {
-                this.els.bgImg.style.opacity = '1';
-            };
-        }, 500);
-    }
-
-    endGame() {
-        this.state.isPlaying = false;
-        this.els.actionZone.innerHTML = `
-            <h2 style="color: var(--secondary-color); text-align: center;">
-                🎉 Ура! Путешествие завершено! <br> Манул доволен!
-            </h2>
-            <button class="btn btn-primary" onclick="location.reload()">Играть снова</button>
-        `;
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    new ManulGame();
-});
+@media (max-width: 600px) {
+    .train-wrapper {
+        width: 100px;
+        height: 70px;
+        left: -100px;
+    }
+    .train-body { width: 80px; height: 50px; }
+    .window { width: 20px; height: 20px; top: 10px; right: 10px; }
+    .wheel { width: 20px; height: 20px; bottom: -5px; }
+    .wheel-left { left: 10px; }
+    .wheel-right { right: 10px; }
+    
+    .landmark-card {
+        padding: 20px;
+        border-radius: 20px;
+    }
+    
+    .landmark-info {
+        margin-bottom: 20px;
+    }
+    
+    .btn-continue {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+}
