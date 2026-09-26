@@ -42,7 +42,6 @@ class ManulGame {
         this.smokeInterval = null;
         this.moveInterval = null;
 
-        // Ждём полной загрузки DOM и инициализируем
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.init());
         } else {
@@ -53,7 +52,6 @@ class ManulGame {
     init() {
         console.log('Игра инициализирована');
 
-        // DOM элементы сцены
         this.els = {
             startBtn: document.getElementById('startBtn'),
             startZone: document.getElementById('startZone'),
@@ -66,7 +64,6 @@ class ManulGame {
             scene: document.getElementById('scene')
         };
 
-        // DOM элементы стартового попапа
         this.startPopup = {
             bg: document.getElementById('startPopupBg'),
             popup: document.getElementById('startPopup'),
@@ -74,7 +71,6 @@ class ManulGame {
             okBtn: document.getElementById('startPopupOk')
         };
 
-        // DOM элементы попапа достопримечательности
         this.landmarkPopup = {
             bg: document.getElementById('landmarkPopupBg'),
             popup: document.getElementById('landmarkPopup'),
@@ -85,7 +81,6 @@ class ManulGame {
             okBtn: document.getElementById('landmarkOk')
         };
 
-        // DOM элементы финального попапа
         this.finalPopup = {
             bg: document.getElementById('finalPopupBg'),
             popup: document.getElementById('finalPopup'),
@@ -96,18 +91,15 @@ class ManulGame {
             okBtn: document.getElementById('finalOk')
         };
 
-        // Проверяем, что все элементы найдены
         if (!this.els.startBtn) {
             console.error('Кнопка startBtn не найдена!');
             return;
         }
 
-        // Настраиваем обработчики попапов
         this.setupPopup(this.startPopup, () => this.startGame());
         this.setupPopup(this.landmarkPopup, () => this.nextLevel());
         this.setupPopup(this.finalPopup, () => location.reload());
 
-        // Обработчики игры
         this.els.blowBtn.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             this.startMoving();
@@ -117,23 +109,19 @@ class ManulGame {
             this.els.blowBtn.addEventListener(event, () => this.stopMoving());
         });
 
-        // Показываем стартовый попап
         this.openPopup(this.startPopup);
     }
 
     setupPopup(popup, onConfirm) {
-        // Кнопка ОК
         popup.okBtn.addEventListener('click', () => {
             this.closePopup(popup);
             onConfirm();
         });
 
-        // Крестик
         popup.closeBtn.addEventListener('click', () => {
             this.closePopup(popup);
         });
 
-        // Клик по фону
         popup.bg.addEventListener('click', (e) => {
             if (e.target === popup.bg) {
                 this.closePopup(popup);
@@ -161,6 +149,8 @@ class ManulGame {
     loadLevel() {
         const location = this.state.locations[this.state.currentLocation];
         this.els.bgImg.src = location.bg;
+        // Убираем полноэкранный режим фона
+        this.els.bgImg.classList.remove('fullscreen');
     }
 
     startMoving() {
@@ -210,11 +200,17 @@ class ManulGame {
     showLandmark() {
         const location = this.state.locations[this.state.currentLocation];
         
+        // МЕНЯЕМ ФОН НА КАРТИНКУ ДОСТОПРИМЕЧАТЕЛЬНОСТИ И РАСТЯГИВАЕМ НА ВЕСЬ ЭКРАН
+        this.els.bgImg.src = location.landmark;
+        this.els.bgImg.classList.add('fullscreen');
+        
+        // Заполняем попап данными
         this.landmarkPopup.image.src = location.landmark;
         this.landmarkPopup.image.alt = location.name;
         this.landmarkPopup.title.textContent = location.name;
         this.landmarkPopup.description.textContent = location.description;
         
+        // Показываем попап поверх полноэкранного фона
         this.openPopup(this.landmarkPopup);
     }
 
@@ -231,22 +227,28 @@ class ManulGame {
         this.els.progressFill.style.width = '0%';
         this.els.trainWrapper.style.left = '-200px';
 
-        // Плавная смена фона
+        // Возвращаем обычный режим фона и загружаем следующий уровень
+        this.els.bgImg.classList.remove('fullscreen');
         this.els.bgImg.style.opacity = '0';
+        
         setTimeout(() => {
             this.loadLevel();
             this.els.bgImg.onload = () => {
                 this.els.bgImg.style.opacity = '1';
             };
-        }, 500);
+        }, 400);
     }
 
     showFinal() {
         const lastLocation = this.state.locations[this.state.locations.length - 1];
         
+        // Фон на весь экран — финальная достопримечательность
+        this.els.bgImg.src = lastLocation.landmark;
+        this.els.bgImg.classList.add('fullscreen');
+        
         this.finalPopup.image.src = lastLocation.landmark;
         this.finalPopup.image.alt = lastLocation.name;
-        this.finalPopup.title.textContent = ' Путешествие завершено!';
+        this.finalPopup.title.textContent = '🎉 Путешествие завершено!';
         this.finalPopup.description.textContent = `Ты помог Манулу добраться до ${lastLocation.name}! Молодец!`;
         
         this.openPopup(this.finalPopup);
@@ -272,5 +274,4 @@ class ManulGame {
     }
 }
 
-// Запуск игры
 new ManulGame();
