@@ -231,7 +231,7 @@ class ManulGame {
 
     showFinal() {
         this.finalPopup.title.textContent = ' Путешествие завершено!';
-        this.finalPopup.description.textContent = 'Ты помог Манулу объехать весь мир! Молодец!';
+        this.finalPopup.description.textContent = 'Ты помог Манулу объехать весь мир и встретиться с другом! Молодец!';
         
         this.openPopup(this.finalPopup);
         this.createConfetti();
