@@ -60,23 +60,15 @@ body {
 
 .bg-image {
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 75%;
-    object-fit: contain;
-    object-position: bottom center;
-    opacity: 0;
-    transition: opacity 0.8s ease-in-out, height 0.8s ease, object-fit 0.8s ease;
-}
-.bg-image.active { opacity: 1; }
-
-/* Режим полноэкранного фона (при показе достопримечательности) */
-.bg-image.fullscreen {
     height: 100%;
     object-fit: cover;
     object-position: center center;
+    opacity: 0;
 }
+.bg-image.active { opacity: 1; }
 
 /* --- РЕЛЬСЫ --- */
 .tracks {
@@ -272,12 +264,6 @@ body {
 .popup__bg.active {
     opacity: 1;
     pointer-events: auto;
-}
-
-/* Для попапа достопримечательности — без затемнения фона, 
-   так как фон уже является картинкой достопримечательности */
-#landmarkPopupBg.popup__bg.active {
-    background: rgba(0, 0, 0, 0.3);
 }
 
 .popup {
