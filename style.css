@@ -1,9 +1,7 @@
 /* ============================================
    MANUL-EXPRESS: ЗВУК [Ч]
-   Финальный CSS со шрифтом Ubuntu и попапами
    ============================================ */
 
-/* --- ПЕРЕМЕННЫЕ --- */
 :root {
     --primary-color: #ff6b6b;
     --secondary-color: #4ecdc4;
@@ -12,7 +10,6 @@
     --train-speed: 0s;
 }
 
-/* --- СБРОС И БАЗА --- */
 * {
     margin: 0;
     padding: 0;
@@ -35,7 +32,6 @@ body {
     -webkit-user-select: none;
 }
 
-/* --- КОНТЕЙНЕР ИГРЫ --- */
 .game-container {
     width: 100vw;
     height: 100vh;
@@ -71,9 +67,16 @@ body {
     object-fit: contain;
     object-position: bottom center;
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 0.8s ease-in-out, height 0.8s ease, object-fit 0.8s ease;
 }
 .bg-image.active { opacity: 1; }
+
+/* Режим полноэкранного фона (при показе достопримечательности) */
+.bg-image.fullscreen {
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
 
 /* --- РЕЛЬСЫ --- */
 .tracks {
@@ -105,7 +108,7 @@ body {
     animation: moveTrack var(--train-speed) linear infinite;
 }
 
-/* --- ПОЕЗД (из картинки) --- */
+/* --- ПОЕЗД --- */
 .train-wrapper {
     position: absolute;
     bottom: 12%;
@@ -143,10 +146,6 @@ body {
 @keyframes puffSmoke {
     0% { transform: scale(0.5) translateY(0); opacity: 0.8; }
     100% { transform: scale(2.5) translateY(-50px); opacity: 0; }
-}
-@keyframes glowPulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.1); opacity: 0.8; }
 }
 @keyframes confettiFall {
     0% {
@@ -191,9 +190,12 @@ body {
     transform: scale(0.95);
 }
 .btn-primary { background: var(--primary-color); color: white; }
-.btn-secondary { background: var(--secondary-color); color: white; }
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
+}
 
-/* --- ЗОНА ДЕЙСТВИЯ (кнопка «Дуй») --- */
+/* --- ЗОНА ДЕЙСТВИЯ --- */
 .action-zone {
     width: 100%;
     display: flex;
@@ -245,25 +247,24 @@ body {
 }
 
 /* ============================================
-   ПОПАПЫ (как в оригинальном проекте)
+   ПОПАПЫ
    ============================================ */
 
-/* Фон попапа (затемнение) */
 .popup__bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;
     z-index: 100;
     padding: 20px;
 }
@@ -273,7 +274,12 @@ body {
     pointer-events: auto;
 }
 
-/* Само окно попапа */
+/* Для попапа достопримечательности — без затемнения фона, 
+   так как фон уже является картинкой достопримечательности */
+#landmarkPopupBg.popup__bg.active {
+    background: rgba(0, 0, 0, 0.3);
+}
+
 .popup {
     background: white;
     border-radius: 30px;
@@ -295,7 +301,6 @@ body {
     opacity: 1;
 }
 
-/* Кнопка закрытия (крестик) */
 .close-popup {
     position: absolute;
     top: 15px;
@@ -307,12 +312,12 @@ body {
     color: #999;
     transition: color 0.2s;
     line-height: 1;
+    z-index: 10;
 }
 .close-popup:hover {
     color: var(--primary-color);
 }
 
-/* Контент попапа */
 .popup-content {
     display: flex;
     flex-direction: column;
@@ -343,15 +348,6 @@ body {
     color: #555;
     font-weight: 400;
     margin-bottom: 10px;
-}
-
-.popup-ok {
-    margin-top: 10px;
-}
-
-/* Специфичные стили для финального попапа */
-.final-popup .popup-title {
-    color: var(--secondary-color);
 }
 
 /* --- КОНФЕТТИ --- */
