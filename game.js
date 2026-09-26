@@ -85,7 +85,6 @@ class ManulGame {
             bg: document.getElementById('finalPopupBg'),
             popup: document.getElementById('finalPopup'),
             closeBtn: document.getElementById('closeFinalPopup'),
-            image: document.getElementById('finalImage'),
             title: document.getElementById('finalTitle'),
             description: document.getElementById('finalDescription'),
             okBtn: document.getElementById('finalOk')
@@ -109,6 +108,10 @@ class ManulGame {
             this.els.blowBtn.addEventListener(event, () => this.stopMoving());
         });
 
+        // Загружаем первый фон сразу
+        this.loadLevel();
+        
+        // Показываем стартовый попап
         this.openPopup(this.startPopup);
     }
 
@@ -143,14 +146,13 @@ class ManulGame {
         this.els.startZone.style.display = 'none';
         this.els.actionZone.style.display = 'flex';
         this.state.isPlaying = true;
-        this.loadLevel();
     }
 
     loadLevel() {
         const location = this.state.locations[this.state.currentLocation];
+        // Мгновенная смена фона без анимации
         this.els.bgImg.src = location.bg;
-        // Убираем полноэкранный режим фона
-        this.els.bgImg.classList.remove('fullscreen');
+        this.els.bgImg.classList.add('active');
     }
 
     startMoving() {
@@ -200,17 +202,13 @@ class ManulGame {
     showLandmark() {
         const location = this.state.locations[this.state.currentLocation];
         
-        // МЕНЯЕМ ФОН НА КАРТИНКУ ДОСТОПРИМЕЧАТЕЛЬНОСТИ И РАСТЯГИВАЕМ НА ВЕСЬ ЭКРАН
-        this.els.bgImg.src = location.landmark;
-        this.els.bgImg.classList.add('fullscreen');
-        
-        // Заполняем попап данными
+        // Заполняем попап данными достопримечательности
         this.landmarkPopup.image.src = location.landmark;
         this.landmarkPopup.image.alt = location.name;
         this.landmarkPopup.title.textContent = location.name;
         this.landmarkPopup.description.textContent = location.description;
         
-        // Показываем попап поверх полноэкранного фона
+        // Показываем попап (фон остаётся тот же — bg_*.png на весь экран)
         this.openPopup(this.landmarkPopup);
     }
 
@@ -227,29 +225,13 @@ class ManulGame {
         this.els.progressFill.style.width = '0%';
         this.els.trainWrapper.style.left = '-200px';
 
-        // Возвращаем обычный режим фона и загружаем следующий уровень
-        this.els.bgImg.classList.remove('fullscreen');
-        this.els.bgImg.style.opacity = '0';
-        
-        setTimeout(() => {
-            this.loadLevel();
-            this.els.bgImg.onload = () => {
-                this.els.bgImg.style.opacity = '1';
-            };
-        }, 400);
+        // Мгновенная смена фона на следующий уровень
+        this.loadLevel();
     }
 
     showFinal() {
-        const lastLocation = this.state.locations[this.state.locations.length - 1];
-        
-        // Фон на весь экран — финальная достопримечательность
-        this.els.bgImg.src = lastLocation.landmark;
-        this.els.bgImg.classList.add('fullscreen');
-        
-        this.finalPopup.image.src = lastLocation.landmark;
-        this.finalPopup.image.alt = lastLocation.name;
-        this.finalPopup.title.textContent = '🎉 Путешествие завершено!';
-        this.finalPopup.description.textContent = `Ты помог Манулу добраться до ${lastLocation.name}! Молодец!`;
+        this.finalPopup.title.textContent = ' Путешествие завершено!';
+        this.finalPopup.description.textContent = 'Ты помог Манулу объехать весь мир! Молодец!';
         
         this.openPopup(this.finalPopup);
         this.createConfetti();
