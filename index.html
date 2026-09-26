@@ -36,37 +36,14 @@
                 <img src="img/poezd.png" alt="Поезд Манула" class="train-image" id="trainImage">
                 <div class="smoke" id="smoke"></div>
             </div>
-
-            <!-- Финальный оверлей с достопримечательностью -->
-            <div class="final-overlay" id="finalOverlay">
-                <div class="final-card">
-                    <div class="final-image-wrapper">
-                        <img src="" alt="" class="final-image" id="finalImage">
-                        <div class="final-glow"></div>
-                    </div>
-                    <div class="final-info">
-                        <h2 class="final-title" id="finalTitle"></h2>
-                        <p class="final-description" id="finalDescription"></p>
-                    </div>
-                    <button class="btn btn-restart" id="restartBtn">Играть снова</button>
-                </div>
-            </div>
         </section>
 
         <!-- UI слой -->
         <section class="ui-layer">
             
-            <!-- Карточка с инструкцией -->
-            <div class="instruction-card" id="instructionCard">
-                <h2>Вокруг света</h2>
-                <p>
-                    Манул отправился в путешествие по железной дороге. 
-                    Помоги ему доехать: чтобы поезд ехал, 
-                    подними язычок к верхним зубам в форме «чашечки», 
-                    набери воздух и <strong>удерживай кнопку</strong>, 
-                    чтобы произнести [Ч-Ч-Ч] и разогнать поезд!
-                </p>
-                <button class="btn btn-primary" id="startBtn">Поехали!</button>
+            <!-- Кнопка старта -->
+            <div class="start-zone" id="startZone">
+                <button class="btn btn-primary open-popup" id="startBtn">Начать игру</button>
             </div>
 
             <!-- Зона действия (кнопка «Дуй») -->
@@ -81,6 +58,51 @@
             </div>
         </section>
     </main>
+
+    <!-- СТАРТОВЫЙ ПОПАП С ИНСТРУКЦИЕЙ -->
+    <div class="popup__bg" id="popupBg">
+        <div class="popup" id="popup">
+            <button class="close-popup" id="closePopup">&times;</button>
+            <div class="popup-content">
+                <img src="img/poezd.png" alt="Поезд" class="popup-image">
+                <h2 class="popup-title">Вокруг света</h2>
+                <p class="popup-text">
+                    Манул отправился в путешествие по железной дороге. 
+                    Помоги ему доехать: чтобы поезд ехал, 
+                    подними язычок к верхним зубам в форме «чашечки», 
+                    набери воздух и <strong>удерживай кнопку</strong>, 
+                    чтобы произнести [Ч-Ч-Ч] и разогнать поезд!
+                </p>
+                <button class="btn btn-primary popup-ok" id="popupOk">ОК</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ПОПАП С ДОСТОПРИМЕЧАТЕЛЬНОСТЬЮ -->
+    <div class="popup__bg" id="landmarkPopupBg">
+        <div class="popup landmark-popup" id="landmarkPopup">
+            <button class="close-popup" id="closeLandmarkPopup">&times;</button>
+            <div class="popup-content">
+                <img src="" alt="" class="popup-image landmark-image" id="landmarkImage">
+                <h2 class="popup-title landmark-title" id="landmarkTitle"></h2>
+                <p class="popup-text landmark-description" id="landmarkDescription"></p>
+                <button class="btn btn-primary popup-ok" id="landmarkOk">Продолжить путешествие</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ФИНАЛЬНЫЙ ПОПАП -->
+    <div class="popup__bg" id="finalPopupBg">
+        <div class="popup final-popup" id="finalPopup">
+            <button class="close-popup" id="closeFinalPopup">&times;</button>
+            <div class="popup-content">
+                <img src="" alt="" class="popup-image final-image" id="finalImage">
+                <h2 class="popup-title final-title">🎉 Путешествие завершено!</h2>
+                <p class="popup-text final-description" id="finalDescription"></p>
+                <button class="btn btn-primary popup-ok" id="finalOk">Играть снова</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Подключение логики игры -->
     <script src="game.js"></script>
