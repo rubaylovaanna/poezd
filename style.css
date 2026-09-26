@@ -421,12 +421,13 @@ body {
         left: -150px;
     }
     
-    .landmark-card {
+    /* ИСПРАВЛЕНО: были .landmark-card и .landmark-info */
+    .final-card {
         padding: 20px;
         border-radius: 20px;
     }
     
-    .landmark-info {
+    .final-info {
         margin-bottom: 20px;
     }
     
