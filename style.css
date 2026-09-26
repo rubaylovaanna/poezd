@@ -1,6 +1,6 @@
 /* ============================================
    MANUL-EXPRESS: ЗВУК [Ч]
-   Финальный CSS со шрифтом Ubuntu
+   Финальный CSS со шрифтом Ubuntu и попапами
    ============================================ */
 
 /* --- ПЕРЕМЕННЫЕ --- */
@@ -171,22 +171,8 @@ body {
     gap: 15px;
 }
 
-.instruction-card {
+.start-zone {
     text-align: center;
-    max-width: 600px;
-}
-.instruction-card h2 {
-    font-size: clamp(1.2rem, 4vw, 1.8rem);
-    margin-bottom: 10px;
-    color: var(--primary-color);
-    font-weight: 700;
-}
-.instruction-card p {
-    font-size: clamp(0.9rem, 3vw, 1.1rem);
-    line-height: 1.5;
-    margin-bottom: 20px;
-    color: #666;
-    font-weight: 400;
 }
 
 /* --- КНОПКИ --- */
@@ -258,9 +244,13 @@ body {
     transition: width 0.1s linear;
 }
 
-/* --- ФИНАЛЬНЫЙ ОВЕРЛЕЙ --- */
-.final-overlay {
-    position: absolute;
+/* ============================================
+   ПОПАПЫ (как в оригинальном проекте)
+   ============================================ */
+
+/* Фон попапа (затемнение) */
+.popup__bg {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -273,17 +263,18 @@ body {
     justify-content: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.5s ease;
-    z-index: 50;
+    transition: opacity 0.3s ease;
+    z-index: 100;
     padding: 20px;
 }
 
-.final-overlay.active {
+.popup__bg.active {
     opacity: 1;
     pointer-events: auto;
 }
 
-.final-card {
+/* Само окно попапа */
+.popup {
     background: white;
     border-radius: 30px;
     padding: 30px;
@@ -294,113 +285,73 @@ body {
     text-align: center;
     transform: scale(0.3) rotate(-10deg);
     opacity: 0;
-    transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
 }
 
-.final-overlay.active .final-card {
+.popup__bg.active .popup {
     transform: scale(1) rotate(0deg);
     opacity: 1;
 }
 
-.final-image-wrapper {
-    position: relative;
-    margin-bottom: 20px;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-.final-image {
-    width: 100%;
-    height: auto;
-    max-height: 300px;
-    object-fit: contain;
-    display: block;
-    transform: scale(0.8);
-    opacity: 0;
-    transition: all 0.6s ease 0.3s;
-}
-
-.final-overlay.active .final-image {
-    transform: scale(1);
-    opacity: 1;
-}
-
-.final-glow {
+/* Кнопка закрытия (крестик) */
+.close-popup {
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
-    animation: glowPulse 2s ease-in-out infinite;
-    pointer-events: none;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s;
+    line-height: 1;
+}
+.close-popup:hover {
+    color: var(--primary-color);
 }
 
-.final-info {
-    margin-bottom: 25px;
+/* Контент попапа */
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
-.final-title {
+.popup-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    max-height: 250px;
+    object-fit: contain;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.popup-title {
     font-size: clamp(1.5rem, 5vw, 2rem);
     color: var(--primary-color);
-    margin-bottom: 15px;
-    transform: translateY(20px);
-    opacity: 0;
-    transition: all 0.5s ease 0.5s;
     font-weight: 700;
+    margin: 10px 0;
 }
 
-.final-overlay.active .final-title {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.final-description {
+.popup-text {
     font-size: clamp(0.9rem, 3vw, 1.1rem);
     line-height: 1.6;
     color: #555;
-    transform: translateY(20px);
-    opacity: 0;
-    transition: all 0.5s ease 0.7s;
     font-weight: 400;
+    margin-bottom: 10px;
 }
 
-.final-overlay.active .final-description {
-    transform: translateY(0);
-    opacity: 1;
+.popup-ok {
+    margin-top: 10px;
 }
 
-/* --- КНОПКА «ИГРАТЬ СНОВА» --- */
-.btn-restart {
-    padding: 15px 40px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--secondary-color), #44a08d);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 8px 20px rgba(78, 205, 196, 0.4);
-    transform: translateY(20px);
-    opacity: 0;
-    transition: all 0.5s ease 0.9s;
-    font-family: 'Ubuntu', sans-serif;
-}
-
-.final-overlay.active .btn-restart {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.btn-restart:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(78, 205, 196, 0.5);
-}
-
-.btn-restart:active {
-    transform: translateY(0);
+/* Специфичные стили для финального попапа */
+.final-popup .popup-title {
+    color: var(--secondary-color);
 }
 
 /* --- КОНФЕТТИ --- */
@@ -411,7 +362,7 @@ body {
     background: var(--primary-color);
     opacity: 0;
     pointer-events: none;
-    z-index: 51;
+    z-index: 101;
 }
 
 /* --- АДАПТИВНОСТЬ --- */
@@ -421,17 +372,16 @@ body {
         left: -150px;
     }
     
-    /* ИСПРАВЛЕНО: были .landmark-card и .landmark-info */
-    .final-card {
+    .popup {
         padding: 20px;
         border-radius: 20px;
     }
     
-    .final-info {
-        margin-bottom: 20px;
+    .popup-image {
+        max-height: 200px;
     }
     
-    .btn-restart {
+    .btn {
         padding: 12px 30px;
         font-size: 1rem;
     }
@@ -455,7 +405,10 @@ body {
         flex: 1;
         justify-content: center;
     }
-    .instruction-card p {
-        margin-bottom: 10px;
+    .popup {
+        max-height: 80vh;
+    }
+    .popup-image {
+        max-height: 150px;
     }
 }
