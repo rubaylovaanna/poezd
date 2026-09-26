@@ -39,21 +39,46 @@ class ManulGame {
             ]
         };
 
+        // DOM элементы сцены
         this.els = {
             startBtn: document.getElementById('startBtn'),
-            instructionCard: document.getElementById('instructionCard'),
+            startZone: document.getElementById('startZone'),
             actionZone: document.getElementById('actionZone'),
             blowBtn: document.getElementById('blowBtn'),
             progressFill: document.getElementById('progressFill'),
             trainWrapper: document.getElementById('trainWrapper'),
             bgImg: document.getElementById('bgImg'),
             smoke: document.getElementById('smoke'),
-            scene: document.getElementById('scene'),
-            finalOverlay: document.getElementById('finalOverlay'),
-            finalImage: document.getElementById('finalImage'),
-            finalTitle: document.getElementById('finalTitle'),
-            finalDescription: document.getElementById('finalDescription'),
-            restartBtn: document.getElementById('restartBtn')
+            scene: document.getElementById('scene')
+        };
+
+        // DOM элементы стартового попапа
+        this.popupEls = {
+            popupBg: document.getElementById('popupBg'),
+            popup: document.getElementById('popup'),
+            closePopup: document.getElementById('closePopup'),
+            popupOk: document.getElementById('popupOk')
+        };
+
+        // DOM элементы попапа достопримечательности
+        this.landmarkPopupEls = {
+            popupBg: document.getElementById('landmarkPopupBg'),
+            popup: document.getElementById('landmarkPopup'),
+            closePopup: document.getElementById('closeLandmarkPopup'),
+            image: document.getElementById('landmarkImage'),
+            title: document.getElementById('landmarkTitle'),
+            description: document.getElementById('landmarkDescription'),
+            okBtn: document.getElementById('landmarkOk')
+        };
+
+        // DOM элементы финального попапа
+        this.finalPopupEls = {
+            popupBg: document.getElementById('finalPopupBg'),
+            popup: document.getElementById('finalPopup'),
+            closePopup: document.getElementById('closeFinalPopup'),
+            image: document.getElementById('finalImage'),
+            description: document.getElementById('finalDescription'),
+            okBtn: document.getElementById('finalOk')
         };
 
         this.smokeInterval = null;
@@ -63,8 +88,28 @@ class ManulGame {
     }
 
     init() {
-        this.els.startBtn.addEventListener('pointerdown', () => this.startGame());
-        
+        // Обработчики стартового попапа
+        this.popupEls.popupOk.addEventListener('click', () => this.startGame());
+        this.popupEls.closePopup.addEventListener('click', () => this.closePopup(this.popupEls));
+        this.popupEls.popupBg.addEventListener('click', (e) => {
+            if (e.target === this.popupEls.popupBg) this.closePopup(this.popupEls);
+        });
+
+        // Обработчики попапа достопримечательности
+        this.landmarkPopupEls.okBtn.addEventListener('click', () => this.nextLevel());
+        this.landmarkPopupEls.closePopup.addEventListener('click', () => this.closePopup(this.landmarkPopupEls));
+        this.landmarkPopupEls.popupBg.addEventListener('click', (e) => {
+            if (e.target === this.landmarkPopupEls.popupBg) this.nextLevel();
+        });
+
+        // Обработчики финального попапа
+        this.finalPopupEls.okBtn.addEventListener('click', () => location.reload());
+        this.finalPopupEls.closePopup.addEventListener('click', () => location.reload());
+        this.finalPopupEls.popupBg.addEventListener('click', (e) => {
+            if (e.target === this.finalPopupEls.popupBg) location.reload();
+        });
+
+        // Обработчики игры
         this.els.blowBtn.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             this.startMoving();
@@ -74,11 +119,21 @@ class ManulGame {
             this.els.blowBtn.addEventListener(event, () => this.stopMoving());
         });
 
-        this.els.restartBtn.addEventListener('click', () => location.reload());
+        // Показываем стартовый попап при загрузке
+        this.showPopup(this.popupEls);
+    }
+
+    showPopup(popupEls) {
+        popupEls.popupBg.classList.add('active');
+    }
+
+    closePopup(popupEls) {
+        popupEls.popupBg.classList.remove('active');
     }
 
     startGame() {
-        this.els.instructionCard.style.display = 'none';
+        this.closePopup(this.popupEls);
+        this.els.startZone.style.display = 'none';
         this.els.actionZone.style.display = 'flex';
         this.state.isPlaying = true;
         this.loadLevel();
@@ -111,7 +166,7 @@ class ManulGame {
     updateProgress() {
         if (this.state.progress >= 100) {
             this.stopMoving();
-            this.nextLevel();
+            this.showLandmark();
             return;
         }
 
@@ -133,7 +188,20 @@ class ManulGame {
         smoke.style.animation = 'puffSmoke 0.6s ease-out forwards';
     }
 
+    showLandmark() {
+        const location = this.state.locations[this.state.currentLocation];
+        
+        this.landmarkPopupEls.image.src = location.landmark;
+        this.landmarkPopupEls.image.alt = location.name;
+        this.landmarkPopupEls.title.textContent = location.name;
+        this.landmarkPopupEls.description.textContent = location.description;
+        
+        this.showPopup(this.landmarkPopupEls);
+    }
+
     nextLevel() {
+        this.closePopup(this.landmarkPopupEls);
+        
         this.state.currentLocation++;
 
         if (this.state.currentLocation >= this.state.locations.length) {
@@ -159,12 +227,11 @@ class ManulGame {
     showFinal() {
         const lastLocation = this.state.locations[this.state.locations.length - 1];
         
-        this.els.finalImage.src = lastLocation.landmark;
-        this.els.finalImage.alt = lastLocation.name;
-        this.els.finalTitle.textContent = lastLocation.name;
-        this.els.finalDescription.textContent = lastLocation.description;
+        this.finalPopupEls.image.src = lastLocation.landmark;
+        this.finalPopupEls.image.alt = lastLocation.name;
+        this.finalPopupEls.description.textContent = `Ты помог Манулу добраться до ${lastLocation.name}! Молодец!`;
         
-        this.els.finalOverlay.classList.add('active');
+        this.showPopup(this.finalPopupEls);
         this.createConfetti();
     }
 
