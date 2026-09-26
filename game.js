@@ -7,29 +7,34 @@ class ManulGame {
             progress: 0,
             locations: [
                 { 
-                    name: 'Кремль', 
-                    img: 'img/kreml.png',
-                    description: 'Московский Кремль — древнейшая часть Москвы, главный общественно-политический и историко-художественный комплекс города. Здесь находится официальная резиденция Президента России.'
+                    bg: 'img/kreml.png',
+                    landmark: 'img/kreml.png',
+                    name: 'Кремль',
+                    description: 'Московский Кремль — древнейшая часть Москвы, главный общественно-политический и историко-художественный комплекс города.'
                 },
                 { 
-                    name: 'Горы', 
-                    img: 'img/gora.png',
-                    description: 'Горы — величественные творения природы! Они покрыты снегом, а их вершины пронзают облака. В горах чистый воздух и живут удивительные животные.'
+                    bg: 'img/gora.png',
+                    landmark: 'img/gora.png',
+                    name: 'Горы',
+                    description: 'Горы — величественные творения природы! Они покрыты снегом, а их вершины пронзают облака.'
                 },
                 { 
-                    name: 'Парфенон', 
-                    img: 'img/parfenon.png',
-                    description: 'Парфенон — древнегреческий храм, построенный более 2400 лет назад в честь богини Афины. Это символ мудрости и культуры Древней Греции.'
+                    bg: 'img/parfenon.png',
+                    landmark: 'img/parfenon.png',
+                    name: 'Парфенон',
+                    description: 'Парфенон — древнегреческий храм, построенный более 2400 лет назад в честь богини Афины.'
                 },
                 { 
-                    name: 'Остров', 
-                    img: 'img/ostrov.png',
-                    description: 'Тропический остров — настоящий рай! Пальмы склонились над бирюзовой водой, а на песчаном пляже можно найти красивые ракушки и понаблюдать за крабами.'
+                    bg: 'img/ostrov.png',
+                    landmark: 'img/ostrov.png',
+                    name: 'Остров',
+                    description: 'Тропический остров — настоящий рай! Пальмы склонились над бирюзовой водой.'
                 },
                 { 
-                    name: 'Вигвам', 
-                    img: 'img/vigvam.png',
-                    description: 'Вигвам — традиционное жилище индейцев Северной Америки. Его делают из длинных шестов и шкур животных. Внутри тепло и уютно даже в холодную погоду!'
+                    bg: 'img/vigvam.png',
+                    landmark: 'img/vigvam.png',
+                    name: 'Вигвам',
+                    description: 'Вигвам — традиционное жилище индейцев Северной Америки из шестов и шкур животных.'
                 }
             ]
         };
@@ -44,12 +49,11 @@ class ManulGame {
             bgImg: document.getElementById('bgImg'),
             smoke: document.getElementById('smoke'),
             scene: document.getElementById('scene'),
-            landmarkOverlay: document.getElementById('landmarkOverlay'),
-            landmarkCard: document.getElementById('landmarkCard'),
-            landmarkImage: document.getElementById('landmarkImage'),
-            landmarkTitle: document.getElementById('landmarkTitle'),
-            landmarkDescription: document.getElementById('landmarkDescription'),
-            continueBtn: document.getElementById('continueBtn')
+            finalOverlay: document.getElementById('finalOverlay'),
+            finalImage: document.getElementById('finalImage'),
+            finalTitle: document.getElementById('finalTitle'),
+            finalDescription: document.getElementById('finalDescription'),
+            restartBtn: document.getElementById('restartBtn')
         };
 
         this.init();
@@ -67,13 +71,19 @@ class ManulGame {
             this.els.blowBtn.addEventListener(event, () => this.stopMoving());
         });
 
-        this.els.continueBtn.addEventListener('click', () => this.nextLocation());
+        this.els.restartBtn.addEventListener('click', () => location.reload());
     }
 
     startGame() {
         this.els.instructionCard.style.display = 'none';
         this.els.actionZone.style.display = 'flex';
         this.state.isPlaying = true;
+        this.loadLevel();
+    }
+
+    loadLevel() {
+        const location = this.state.locations[this.state.currentLocation];
+        this.els.bgImg.src = location.bg;
     }
 
     startMoving() {
@@ -98,7 +108,7 @@ class ManulGame {
     updateProgress() {
         if (this.state.progress >= 100) {
             this.stopMoving();
-            this.showLandmark();
+            this.nextLevel();
             return;
         }
 
@@ -120,16 +130,38 @@ class ManulGame {
         smoke.style.animation = 'puffSmoke 0.6s ease-out forwards';
     }
 
-    showLandmark() {
-        const location = this.state.locations[this.state.currentLocation];
+    nextLevel() {
+        this.state.currentLocation++;
+
+        if (this.state.currentLocation >= this.state.locations.length) {
+            this.showFinal();
+            return;
+        }
+
+        // Сброс прогресса и поезда
+        this.state.progress = 0;
+        this.els.progressFill.style.width = '0%';
+        this.els.trainWrapper.style.left = '-150px';
+
+        // Плавная смена фона
+        this.els.bgImg.style.opacity = '0';
+        setTimeout(() => {
+            this.loadLevel();
+            this.els.bgImg.onload = () => {
+                this.els.bgImg.style.opacity = '1';
+            };
+        }, 500);
+    }
+
+    showFinal() {
+        const lastLocation = this.state.locations[this.state.locations.length - 1];
         
-        this.els.landmarkImage.src = location.img;
-        this.els.landmarkImage.alt = location.name;
-        this.els.landmarkTitle.textContent = location.name;
-        this.els.landmarkDescription.textContent = location.description;
+        this.els.finalImage.src = lastLocation.landmark;
+        this.els.finalImage.alt = lastLocation.name;
+        this.els.finalTitle.textContent = lastLocation.name;
+        this.els.finalDescription.textContent = lastLocation.description;
         
-        this.els.landmarkOverlay.classList.add('active');
-        
+        this.els.finalOverlay.classList.add('active');
         this.createConfetti();
     }
 
@@ -149,39 +181,6 @@ class ManulGame {
                 setTimeout(() => confetti.remove(), 4000);
             }, i * 30);
         }
-    }
-
-    nextLocation() {
-        this.els.landmarkOverlay.classList.remove('active');
-        
-        this.state.currentLocation++;
-
-        if (this.state.currentLocation >= this.state.locations.length) {
-            this.endGame();
-            return;
-        }
-
-        this.state.progress = 0;
-        this.els.progressFill.style.width = '0%';
-        this.els.trainWrapper.style.left = '-150px';
-
-        this.els.bgImg.style.opacity = '0';
-        setTimeout(() => {
-            this.els.bgImg.src = this.state.locations[this.state.currentLocation].img;
-            this.els.bgImg.onload = () => {
-                this.els.bgImg.style.opacity = '1';
-            };
-        }, 500);
-    }
-
-    endGame() {
-        this.state.isPlaying = false;
-        this.els.actionZone.innerHTML = `
-            <h2 style="color: var(--secondary-color); text-align: center;">
-                🎉 Ура! Путешествие завершено! <br> Манул доволен!
-            </h2>
-            <button class="btn btn-primary" onclick="location.reload()">Играть снова</button>
-        `;
     }
 }
 
