@@ -1,278 +1,5 @@
-/* ============================================
-   MANUL-EXPRESS: ЗВУК [Ч]
-   Финальный CSS со шрифтом Ubuntu
-   ============================================ */
-
-/* --- ПЕРЕМЕННЫЕ --- */
-:root {
-    --primary-color: #ff6b6b;
-    --secondary-color: #4ecdc4;
-    --bg-color: #f7f9fc;
-    --text-color: #2d3436;
-    --train-speed: 0s;
-}
-
-/* --- СБРОС И БАЗА --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
-
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-
-body {
-    font-family: 'Ubuntu', sans-serif;
-    background: var(--bg-color);
-    color: var(--text-color);
-    touch-action: manipulation;
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-/* --- КОНТЕЙНЕР ИГРЫ --- */
-.game-container {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
-}
-
-/* --- СЦЕНА --- */
-.scene {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 60%, #B0E0E6 100%);
-}
-
-.background-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-
-.bg-image {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 75%;
-    object-fit: contain;
-    object-position: bottom center;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-}
-.bg-image.active { opacity: 1; }
-
-/* --- РЕЛЬСЫ --- */
-.tracks {
-    position: absolute;
-    bottom: 12%;
-    width: 100%;
-    height: 20px;
-    z-index: 2;
-}
-.track-line {
-    position: absolute;
-    top: 5px;
-    width: 100%;
-    height: 4px;
-    background: #555;
-}
-.track-sleepers {
-    position: absolute;
-    top: 0;
-    width: 200%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 20px,
-        #8B4513 20px,
-        #8B4513 25px
-    );
-    animation: moveTrack var(--train-speed) linear infinite;
-}
-
-/* --- ПОЕЗД (CSS-арт) --- */
-.train-wrapper {
-    position: absolute;
-    bottom: 15%;
-    left: -150px;
-    width: 150px;
-    height: 100px;
-    z-index: 3;
-    transition: left 0.1s linear;
-}
-
-.train-body {
-    width: 120px;
-    height: 70px;
-    background: var(--primary-color);
-    border-radius: 10px 20px 5px 5px;
-    position: absolute;
-    bottom: 20px;
-    left: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-.window {
-    width: 30px;
-    height: 30px;
-    background: #fff;
-    border-radius: 5px;
-    position: absolute;
-    top: 15px;
-    right: 20px;
-}
-.wheel {
-    width: 30px;
-    height: 30px;
-    background: #333;
-    border-radius: 50%;
-    position: absolute;
-    bottom: -10px;
-    border: 4px solid #777;
-    animation: spinWheel var(--train-speed) linear infinite;
-}
-.wheel-left { left: 20px; }
-.wheel-right { right: 20px; }
-
-.smoke {
-    position: absolute;
-    top: -20px;
-    left: 30px;
-    width: 20px;
-    height: 20px;
-    background: rgba(255,255,255,0.8);
-    border-radius: 50%;
-    opacity: 0;
-}
-
-/* --- АНИМАЦИИ --- */
-@keyframes moveTrack {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-45px); }
-}
-@keyframes spinWheel {
-    100% { transform: rotate(360deg); }
-}
-@keyframes puffSmoke {
-    0% { transform: scale(0.5) translateY(0); opacity: 0.8; }
-    100% { transform: scale(2) translateY(-40px); opacity: 0; }
-}
-
-/* --- UI СЛОЙ --- */
-.ui-layer {
-    padding: 20px;
-    background: white;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-}
-
-.instruction-card {
-    text-align: center;
-    max-width: 600px;
-}
-.instruction-card h2 {
-    font-size: clamp(1.2rem, 4vw, 1.8rem);
-    margin-bottom: 10px;
-    color: var(--primary-color);
-    font-weight: 700;
-}
-.instruction-card p {
-    font-size: clamp(0.9rem, 3vw, 1.1rem);
-    line-height: 1.5;
-    margin-bottom: 20px;
-    color: #666;
-    font-weight: 400;
-}
-
-/* --- КНОПКИ --- */
-.btn {
-    padding: 15px 40px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    font-family: 'Ubuntu', sans-serif;
-}
-.btn:active {
-    transform: scale(0.95);
-}
-.btn-primary { background: var(--primary-color); color: white; }
-.btn-secondary { background: var(--secondary-color); color: white; }
-
-/* --- ЗОНА ДЕЙСТВИЯ (кнопка "Дуй") --- */
-.action-zone {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-}
-
-.blow-button {
-    width: 100%;
-    max-width: 400px;
-    padding: 25px;
-    background: linear-gradient(135deg, #4ecdc4, #44a08d);
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 700;
-    border: none;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    box-shadow: 0 8px 15px rgba(78, 205, 196, 0.4);
-    transition: all 0.2s;
-    font-family: 'Ubuntu', sans-serif;
-}
-.blow-button:active, .blow-button.active {
-    transform: scale(0.98);
-    box-shadow: 0 4px 8px rgba(78, 205, 196, 0.4);
-    background: linear-gradient(135deg, #44a08d, #388e7e);
-}
-.blow-icon { font-size: 2rem; }
-
-/* --- ПРОГРЕСС-БАР --- */
-.progress-bar {
-    width: 100%;
-    max-width: 400px;
-    height: 12px;
-    background: #eee;
-    border-radius: 10px;
-    overflow: hidden;
-}
-.progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
-    border-radius: 10px;
-    transition: width 0.1s linear;
-}
-
-/* --- ОВЕРЛЕЙ ДОСТОПРИМЕЧАТЕЛЬНОСТИ --- */
-.landmark-overlay {
+/* --- ФИНАЛЬНЫЙ ОВЕРЛЕЙ --- */
+.final-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -291,12 +18,12 @@ body {
     padding: 20px;
 }
 
-.landmark-overlay.active {
+.final-overlay.active {
     opacity: 1;
     pointer-events: auto;
 }
 
-.landmark-card {
+.final-card {
     background: white;
     border-radius: 30px;
     padding: 30px;
@@ -311,12 +38,12 @@ body {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
-.landmark-overlay.active .landmark-card {
+.final-overlay.active .final-card {
     transform: scale(1) rotate(0deg);
     opacity: 1;
 }
 
-.landmark-image-wrapper {
+.final-image-wrapper {
     position: relative;
     margin-bottom: 20px;
     border-radius: 20px;
@@ -324,7 +51,7 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.landmark-image {
+.final-image {
     width: 100%;
     height: auto;
     max-height: 300px;
@@ -335,12 +62,12 @@ body {
     transition: all 0.6s ease 0.3s;
 }
 
-.landmark-overlay.active .landmark-image {
+.final-overlay.active .final-image {
     transform: scale(1);
     opacity: 1;
 }
 
-.landmark-glow {
+.final-glow {
     position: absolute;
     top: -50%;
     left: -50%;
@@ -351,16 +78,11 @@ body {
     pointer-events: none;
 }
 
-@keyframes glowPulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.1); opacity: 0.8; }
-}
-
-.landmark-info {
+.final-info {
     margin-bottom: 25px;
 }
 
-.landmark-title {
+.final-title {
     font-size: clamp(1.5rem, 5vw, 2rem);
     color: var(--primary-color);
     margin-bottom: 15px;
@@ -370,12 +92,12 @@ body {
     font-weight: 700;
 }
 
-.landmark-overlay.active .landmark-title {
+.final-overlay.active .final-title {
     transform: translateY(0);
     opacity: 1;
 }
 
-.landmark-description {
+.final-description {
     font-size: clamp(0.9rem, 3vw, 1.1rem);
     line-height: 1.6;
     color: #555;
@@ -385,13 +107,12 @@ body {
     font-weight: 400;
 }
 
-.landmark-overlay.active .landmark-description {
+.final-overlay.active .final-description {
     transform: translateY(0);
     opacity: 1;
 }
 
-/* --- КНОПКА "ПРОДОЛЖИТЬ" --- */
-.btn-continue {
+.btn-restart {
     padding: 15px 40px;
     font-size: 1.1rem;
     font-weight: 700;
@@ -407,89 +128,16 @@ body {
     font-family: 'Ubuntu', sans-serif;
 }
 
-.landmark-overlay.active .btn-continue {
+.final-overlay.active .btn-restart {
     transform: translateY(0);
     opacity: 1;
 }
 
-.btn-continue:hover {
+.btn-restart:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 25px rgba(78, 205, 196, 0.5);
 }
 
-.btn-continue:active {
+.btn-restart:active {
     transform: translateY(0);
-}
-
-/* --- КОНФЕТТИ --- */
-.confetti {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: var(--primary-color);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 51;
-}
-
-@keyframes confettiFall {
-    0% {
-        transform: translateY(-100px) rotate(0deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-    }
-}
-
-/* --- АДАПТИВНОСТЬ --- */
-@media (max-width: 600px) {
-    .train-wrapper {
-        width: 100px;
-        height: 70px;
-        left: -100px;
-    }
-    .train-body { width: 80px; height: 50px; }
-    .window { width: 20px; height: 20px; top: 10px; right: 10px; }
-    .wheel { width: 20px; height: 20px; bottom: -5px; }
-    .wheel-left { left: 10px; }
-    .wheel-right { right: 10px; }
-    
-    .landmark-card {
-        padding: 20px;
-        border-radius: 20px;
-    }
-    
-    .landmark-info {
-        margin-bottom: 20px;
-    }
-    
-    .btn-continue {
-        padding: 12px 30px;
-        font-size: 1rem;
-    }
-    
-    .ui-layer {
-        padding: 15px;
-        gap: 10px;
-    }
-    
-    .blow-button {
-        padding: 20px;
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-height: 500px) and (orientation: landscape) {
-    .scene {
-        flex: 2;
-    }
-    .ui-layer {
-        flex: 1;
-        justify-content: center;
-    }
-    .instruction-card p {
-        margin-bottom: 10px;
-    }
 }
