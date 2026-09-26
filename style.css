@@ -1,5 +1,6 @@
 /* ============================================
    MANUL-EXPRESS: ЗВУК [Ч]
+   ИСПРАВЛЕННАЯ ВЕРСИЯ
    ============================================ */
 
 :root {
@@ -41,9 +42,10 @@ body {
     overflow: hidden;
 }
 
-/* --- СЦЕНА --- */
+/* --- СЦЕНА (занимает всё доступное пространство) --- */
 .scene {
-    flex: 1;
+    flex: 1 1 auto;
+    min-height: 0;
     position: relative;
     overflow: hidden;
     background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 60%, #B0E0E6 100%);
@@ -150,16 +152,17 @@ body {
     }
 }
 
-/* --- UI СЛОЙ --- */
+/* --- UI СЛОЙ (компактный) --- */
 .ui-layer {
-    padding: 20px;
+    flex: 0 0 auto;
+    padding: 15px 20px;
     background: white;
     box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
     z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .start-zone {
@@ -168,8 +171,8 @@ body {
 
 /* --- КНОПКИ --- */
 .btn {
-    padding: 15px 40px;
-    font-size: 1.2rem;
+    padding: 12px 35px;
+    font-size: 1.1rem;
     font-weight: 700;
     border: none;
     border-radius: 50px;
@@ -193,23 +196,23 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .blow-button {
     width: 100%;
     max-width: 400px;
-    padding: 25px;
+    padding: 18px 25px;
     background: linear-gradient(135deg, #4ecdc4, #44a08d);
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 700;
     border: none;
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 12px;
     box-shadow: 0 8px 15px rgba(78, 205, 196, 0.4);
     transition: all 0.2s;
     font-family: 'Ubuntu', sans-serif;
@@ -219,13 +222,13 @@ body {
     box-shadow: 0 4px 8px rgba(78, 205, 196, 0.4);
     background: linear-gradient(135deg, #44a08d, #388e7e);
 }
-.blow-icon { font-size: 2rem; }
+.blow-icon { font-size: 1.8rem; }
 
 /* --- ПРОГРЕСС-БАР --- */
 .progress-bar {
     width: 100%;
     max-width: 400px;
-    height: 12px;
+    height: 10px;
     background: #eee;
     border-radius: 10px;
     overflow: hidden;
@@ -364,28 +367,29 @@ body {
     }
     
     .btn {
-        padding: 12px 30px;
+        padding: 10px 25px;
         font-size: 1rem;
     }
     
     .ui-layer {
-        padding: 15px;
-        gap: 10px;
+        padding: 10px 15px;
+        gap: 8px;
     }
     
     .blow-button {
-        padding: 20px;
-        font-size: 1.2rem;
+        padding: 15px 20px;
+        font-size: 1.1rem;
     }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
     .scene {
-        flex: 2;
+        flex: 2 1 auto;
     }
     .ui-layer {
-        flex: 1;
+        flex: 0 0 auto;
         justify-content: center;
+        padding: 8px 15px;
     }
     .popup {
         max-height: 80vh;
