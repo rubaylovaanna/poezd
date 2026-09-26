@@ -22,7 +22,7 @@
             
             <!-- Слой фона (меняется на каждом уровне) -->
             <div class="background-layer" id="bgLayer">
-                <img src="img/kreml.png" alt="Фон уровня" class="bg-image active" id="bgImg">
+                <img src="img/bg_kreml.png" alt="Фон уровня" class="bg-image active" id="bgImg">
             </div>
             
             <!-- Рельсы -->
@@ -31,16 +31,10 @@
                 <div class="track-sleepers"></div>
             </div>
 
-            <!-- Поезд (CSS-арт) -->
+            <!-- Поезд из картинки -->
             <div class="train-wrapper" id="trainWrapper">
-                <div class="train" id="train">
-                    <div class="smoke" id="smoke"></div>
-                    <div class="train-body">
-                        <div class="window"></div>
-                        <div class="wheel wheel-left"></div>
-                        <div class="wheel wheel-right"></div>
-                    </div>
-                </div>
+                <img src="img/poezd.png" alt="Поезд Манула" class="train-image" id="trainImage">
+                <div class="smoke" id="smoke"></div>
             </div>
 
             <!-- Финальный оверлей с достопримечательностью -->
@@ -64,17 +58,18 @@
             
             <!-- Карточка с инструкцией -->
             <div class="instruction-card" id="instructionCard">
-                <h2>Помоги Манулу доехать!</h2>
+                <h2>Вокруг света</h2>
                 <p>
                     Манул отправился в путешествие по железной дороге. 
-                    Подними язычок к верхним зубам в форме «чашечки», 
+                    Помоги ему доехать: чтобы поезд ехал, 
+                    подними язычок к верхним зубам в форме «чашечки», 
                     набери воздух и <strong>удерживай кнопку</strong>, 
                     чтобы произнести [Ч-Ч-Ч] и разогнать поезд!
                 </p>
                 <button class="btn btn-primary" id="startBtn">Поехали!</button>
             </div>
 
-            <!-- Зона действия (кнопка "Дуй") -->
+            <!-- Зона действия (кнопка «Дуй») -->
             <div class="action-zone" id="actionZone" style="display: none;">
                 <button class="blow-button" id="blowBtn">
                     <span class="blow-icon">💨</span>
