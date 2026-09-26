@@ -6,12 +6,10 @@
     <meta name="description" content="Интерактивная логопедическая игра для детей — тренировка звука [Ч]">
     <title>Манул-экспресс: Звук [Ч]</title>
     
-    <!-- Подключение шрифта Ubuntu -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <!-- Подключение стилей -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,19 +17,15 @@
         
         <!-- Игровая сцена -->
         <section class="scene" id="scene">
-            
-            <!-- Слой фона (меняется на каждом уровне) -->
             <div class="background-layer" id="bgLayer">
                 <img src="img/bg_kreml.png" alt="Фон уровня" class="bg-image active" id="bgImg">
             </div>
             
-            <!-- Рельсы -->
             <div class="tracks">
                 <div class="track-line"></div>
                 <div class="track-sleepers"></div>
             </div>
 
-            <!-- Поезд из картинки -->
             <div class="train-wrapper" id="trainWrapper">
                 <img src="img/poezd.png" alt="Поезд Манула" class="train-image" id="trainImage">
                 <div class="smoke" id="smoke"></div>
@@ -40,13 +34,10 @@
 
         <!-- UI слой -->
         <section class="ui-layer">
-            
-            <!-- Кнопка старта -->
             <div class="start-zone" id="startZone">
-                <button class="btn btn-primary open-popup" id="startBtn">Начать игру</button>
+                <button class="btn btn-primary" id="startBtn">Начать игру</button>
             </div>
 
-            <!-- Зона действия (кнопка «Дуй») -->
             <div class="action-zone" id="actionZone" style="display: none;">
                 <button class="blow-button" id="blowBtn">
                     <span class="blow-icon">💨</span>
@@ -59,10 +50,10 @@
         </section>
     </main>
 
-    <!-- СТАРТОВЫЙ ПОПАП С ИНСТРУКЦИЕЙ -->
-    <div class="popup__bg" id="popupBg">
-        <div class="popup" id="popup">
-            <button class="close-popup" id="closePopup">&times;</button>
+    <!-- СТАРТОВЫЙ ПОПАП -->
+    <div class="popup__bg" id="startPopupBg">
+        <div class="popup" id="startPopup">
+            <button class="close-popup" id="closeStartPopup">&times;</button>
             <div class="popup-content">
                 <img src="img/poezd.png" alt="Поезд" class="popup-image">
                 <h2 class="popup-title">Вокруг света</h2>
@@ -73,38 +64,37 @@
                     набери воздух и <strong>удерживай кнопку</strong>, 
                     чтобы произнести [Ч-Ч-Ч] и разогнать поезд!
                 </p>
-                <button class="btn btn-primary popup-ok" id="popupOk">ОК</button>
+                <button class="btn btn-primary" id="startPopupOk">ОК, поехали!</button>
             </div>
         </div>
     </div>
 
     <!-- ПОПАП С ДОСТОПРИМЕЧАТЕЛЬНОСТЬЮ -->
     <div class="popup__bg" id="landmarkPopupBg">
-        <div class="popup landmark-popup" id="landmarkPopup">
+        <div class="popup" id="landmarkPopup">
             <button class="close-popup" id="closeLandmarkPopup">&times;</button>
             <div class="popup-content">
-                <img src="" alt="" class="popup-image landmark-image" id="landmarkImage">
-                <h2 class="popup-title landmark-title" id="landmarkTitle"></h2>
-                <p class="popup-text landmark-description" id="landmarkDescription"></p>
-                <button class="btn btn-primary popup-ok" id="landmarkOk">Продолжить путешествие</button>
+                <img src="" alt="" class="popup-image" id="landmarkImage">
+                <h2 class="popup-title" id="landmarkTitle"></h2>
+                <p class="popup-text" id="landmarkDescription"></p>
+                <button class="btn btn-primary" id="landmarkOk">Продолжить путешествие</button>
             </div>
         </div>
     </div>
 
     <!-- ФИНАЛЬНЫЙ ПОПАП -->
     <div class="popup__bg" id="finalPopupBg">
-        <div class="popup final-popup" id="finalPopup">
+        <div class="popup" id="finalPopup">
             <button class="close-popup" id="closeFinalPopup">&times;</button>
             <div class="popup-content">
-                <img src="" alt="" class="popup-image final-image" id="finalImage">
-                <h2 class="popup-title final-title">🎉 Путешествие завершено!</h2>
-                <p class="popup-text final-description" id="finalDescription"></p>
-                <button class="btn btn-primary popup-ok" id="finalOk">Играть снова</button>
+                <img src="" alt="" class="popup-image" id="finalImage">
+                <h2 class="popup-title" id="finalTitle">🎉 Путешествие завершено!</h2>
+                <p class="popup-text" id="finalDescription"></p>
+                <button class="btn btn-primary" id="finalOk">Играть снова</button>
             </div>
         </div>
     </div>
 
-    <!-- Подключение логики игры -->
     <script src="game.js"></script>
 </body>
 </html>
