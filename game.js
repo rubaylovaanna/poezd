@@ -7,34 +7,34 @@ class ManulGame {
             progress: 0,
             locations: [
                 { 
-                    bg: 'img/kreml.png',
+                    bg: 'img/bg_kreml.png',
                     landmark: 'img/kreml.png',
                     name: 'Кремль',
-                    description: 'Московский Кремль — древнейшая часть Москвы, главный общественно-политический и историко-художественный комплекс города.'
+                    description: 'Московский Кремль — древнейшая часть Москвы, главный общественно-политический и историко-художественный комплекс города. Здесь находится официальная резиденция Президента России.'
                 },
                 { 
-                    bg: 'img/gora.png',
+                    bg: 'img/bg_gora.png',
                     landmark: 'img/gora.png',
                     name: 'Горы',
-                    description: 'Горы — величественные творения природы! Они покрыты снегом, а их вершины пронзают облака.'
+                    description: 'Горы — величественные творения природы! Они покрыты снегом, а их вершины пронзают облака. В горах чистый воздух и живут удивительные животные.'
                 },
                 { 
-                    bg: 'img/parfenon.png',
+                    bg: 'img/bg_parfenon.png',
                     landmark: 'img/parfenon.png',
                     name: 'Парфенон',
-                    description: 'Парфенон — древнегреческий храм, построенный более 2400 лет назад в честь богини Афины.'
+                    description: 'Парфенон — древнегреческий храм, построенный более 2400 лет назад в честь богини Афины. Это символ мудрости и культуры Древней Греции.'
                 },
                 { 
-                    bg: 'img/ostrov.png',
+                    bg: 'img/bg_ostrov.png',
                     landmark: 'img/ostrov.png',
                     name: 'Остров',
-                    description: 'Тропический остров — настоящий рай! Пальмы склонились над бирюзовой водой.'
+                    description: 'Тропический остров — настоящий рай! Пальмы склонились над бирюзовой водой, а на песчаном пляже можно найти красивые ракушки и понаблюдать за крабами.'
                 },
                 { 
-                    bg: 'img/vigvam.png',
+                    bg: 'img/bg_vigvam.png',
                     landmark: 'img/vigvam.png',
                     name: 'Вигвам',
-                    description: 'Вигвам — традиционное жилище индейцев Северной Америки из шестов и шкур животных.'
+                    description: 'Вигвам — традиционное жилище индейцев Северной Америки. Его делают из длинных шестов и шкур животных. Внутри тепло и уютно даже в холодную погоду!'
                 }
             ]
         };
@@ -55,6 +55,9 @@ class ManulGame {
             finalDescription: document.getElementById('finalDescription'),
             restartBtn: document.getElementById('restartBtn')
         };
+
+        this.smokeInterval = null;
+        this.moveInterval = null;
 
         this.init();
     }
@@ -101,8 +104,8 @@ class ManulGame {
         this.els.blowBtn.classList.remove('active');
         
         document.documentElement.style.setProperty('--train-speed', '0s');
-        clearInterval(this.moveInterval);
         clearInterval(this.smokeInterval);
+        clearInterval(this.moveInterval);
     }
 
     updateProgress() {
@@ -141,7 +144,7 @@ class ManulGame {
         // Сброс прогресса и поезда
         this.state.progress = 0;
         this.els.progressFill.style.width = '0%';
-        this.els.trainWrapper.style.left = '-150px';
+        this.els.trainWrapper.style.left = '-200px';
 
         // Плавная смена фона
         this.els.bgImg.style.opacity = '0';
